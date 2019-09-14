@@ -85,6 +85,10 @@ public class Moonlit extends JFrame {
         setupOk = true;
     }
 
+    public void setTitle(String name) {
+        this.setName(name);
+    }
+
     public void showWindow() {
         if (!setupOk) {
             Moonlit.log("you must call createWindow method first.");
