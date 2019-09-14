@@ -69,7 +69,7 @@ public class Setup {
             log("Usage: java Setup [vol] [name]");
         } else {
             int vol = Integer.parseInt(args[0]);
-            String name = args[1].toLowerCase();
+            String name = args[1].toLowerCase().replace("-", "_");
             String folderName = vol+"-"+name;
             Runtime runtime = Runtime.getRuntime();
             try{

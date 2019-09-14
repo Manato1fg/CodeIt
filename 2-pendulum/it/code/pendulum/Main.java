@@ -25,7 +25,7 @@ public class Main implements MoonlitInterface {
         moonlit.register(this);
         
         for(int i = 0; i < 50; i++) {
-            this.pendulums.add(new Pendulum(400, 200, Math.toRadians(40.0), 100+i));
+            this.pendulums.add(new Pendulum(400, 100, Math.toRadians(40.0), 200+1*i));
         }
 
         moonlit.setPlaySpeed(100);
@@ -50,7 +50,7 @@ public class Main implements MoonlitInterface {
             this.x = x;
             this.y = y;
             this.length = length;
-            this.omega = -0.20;
+            this.omega = -0;
             this.theta = theta0;
             h = 1.0 / (double) Main.ticks;
         }
