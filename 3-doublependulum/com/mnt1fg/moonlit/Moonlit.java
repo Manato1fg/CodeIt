@@ -51,6 +51,7 @@ public class Moonlit extends JFrame {
     private int width, height;
     private boolean setupOk = false;
     public boolean isFirst = true;
+    private int offsetWidth = 0, offsetHeight = 0;
 
     public double elapsedTime = 0.0;
     private int playSpeed = 1;
@@ -132,39 +133,44 @@ public class Moonlit extends JFrame {
     }
 
     public void drawRect(Graphics g, int x, int y, int width, int height) {
-        g.drawRect(x, y, width, height);
+        g.drawRect(x + this.offsetWidth, y + this.offsetHeight, width, height);
     }
 
     public void drawLine(Graphics g, int x1, int y1, int x2, int y2) {
-        g.drawLine(x1, y1, x2, y2);
+        g.drawLine(x1 + this.offsetWidth, y1 + this.offsetHeight, x2 + this.offsetWidth, y2 + this.offsetHeight);
     }
 
     public void drawArc(Graphics g, int x, int y, int width, int height, int startAngle, int arcAngle) {
-        g.drawArc(x, y, width, height, startAngle, arcAngle);
+        g.drawArc(x + this.offsetWidth, y + this.offsetHeight, width, height, startAngle, arcAngle);
     }
 
     public void drawCircle(Graphics g, int x, int y, int radius) {
-        g.drawArc(x - radius, y - radius, radius * 2, radius * 2, 0, 360);
+        g.drawArc(x - radius + this.offsetWidth, y - radius + this.offsetHeight, radius * 2, radius * 2, 0, 360);
     }
 
     public void fillRect(Graphics g, int x, int y, int width, int height) {
-        g.fillRect(x, y, width, height);
+        g.fillRect(x + this.offsetWidth, y + this.offsetHeight, width, height);
     }
 
     public void fillArc(Graphics g, int x, int y, int width, int height, int startAngle, int arcAngle) {
-        g.fillArc(x, y, width, height, startAngle, arcAngle);
+        g.fillArc(x + this.offsetWidth, y + this.offsetHeight, width, height, startAngle, arcAngle);
     }
 
     public void fillCircle(Graphics g, int x, int y, int radius) {
-        g.fillArc(x - radius, y - radius, radius * 2, radius * 2, 0, 360);
+        g.fillArc(x - radius + this.offsetWidth, y - radius + this.offsetHeight, radius * 2, radius * 2, 0, 360);
     }
 
     public void drawString(Graphics g, int x, int y, String str) {
-        g.drawString(str, x, y);
+        g.drawString(str, x + this.offsetWidth, y + this.offsetHeight);
     }
 
     public void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
+    }
+
+    public void translate(int offsetWidth, int offsetHeight) {
+        this.offsetWidth = offsetWidth;
+        this.offsetHeight = offsetHeight;
     }
 
     public void setAntiAliasing(boolean flag) {
