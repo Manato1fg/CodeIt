@@ -15,7 +15,7 @@ is a simulator of 100 penudulums. Formula is cited from [Here](http://godfoot.wo
 
 ## #3-double-pendulum
 is a simulator of double pendulum which gives us a chaotic movement. Formula is cited from [Here](https://www.aihara.co.jp/~taiji/pendula-equations/present-node2.html) (Also Japanese page). We cannnot predict next movement of double pendulum so I enjoy wathing this really long time.
-<video src="./3-doublependulum/movie4.mp4" controls preload="none"></video>
+<video src="./3-doublependulum/movie4.mp4" controls></video>
 
 ## #4-mosaic-image
 is a project for creating a memory of my sports day. How to create. First divide destination image into pieces whose size is 25x20(you can change this value, smaller size, higher quality image will be created but more time needed.). Calculate distance of RGB of each pixel of data images and divided image.
