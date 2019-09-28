@@ -40,17 +40,24 @@ public class Setup {
     "//Automatically Created by CodeIt Setup\n" +
     "package $1;\n\n" +
     "import com.mnt1fg.moonlit.*;\n" +
-    "import java.awt.Graphics;\n\n" +
+    "import java.awt.Graphics;\n" +
+    "import java.awt.Color;\n\n" +
     "public class Main implements MoonlitInterface { \n\n"+
-    "   public static void main(String[] args) { \n" +
-    "       new Main();\n"+
-    "   }\n\n"+
-    "   public Main() {\n"+
-    "   }\n\n"+
-    "   @Override\n"+
-    "   public void onUpdate(Graphics g) { \n"+
-    "       //draw something \n" + 
-    "   }\n" +
+    "    public static void main(String[] args) { \n" +
+    "        new Main();\n"+
+    "    }\n\n"+
+    "    public Main() {\n"+
+    "    }\n\n"+
+    "    @Override\n"+
+    "    public void onUpdate(Graphics g) { \n"+
+    "        //draw something \n" + 
+    "    }\n" +
+    "    @Override\n"+
+    "    public void onKeyPressed(KeyEvent e) {\n}" +
+    "    @Override\n" + 
+    "    public void onKeyReleased(KeyEvent e) {\n}" +
+    "    @Override\n" + 
+    "    public void onKeyTyped(KeyEvent e) {\n}" +
     "}";
 
     public static final String TEMPLATE_BUILD = "" + 
