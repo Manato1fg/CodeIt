@@ -5,6 +5,7 @@ import com.mnt1fg.moonlit.*;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.function.Function;
 import java.awt.Color;
 
 public class Main implements MoonlitInterface {
@@ -13,6 +14,7 @@ public class Main implements MoonlitInterface {
     boolean flag = false;
 
     public static final double R3 = 1.7320508;
+    public static final int KEY_SPACE = 32;
 
     ArrayList<Point> points = new ArrayList<>();
 
@@ -30,6 +32,7 @@ public class Main implements MoonlitInterface {
         moonlit.setBackgroundColor(Color.black);
         moonlit.setTicks(0.05);
         moonlit.register(this);
+        moonlit.onKeyPressed(fn);
         moonlit.showWindow();
     }
 
@@ -51,33 +54,13 @@ public class Main implements MoonlitInterface {
         moonlit.drawLine(g, (int) p1.x, (int) p1.y, (int) p2.x, (int) p2.y);
     }
 
-    class Point {
-
-        public double x, y;
-
-        public Point(double x, double y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        public double distance(Point p) {
-            return Math.sqrt((p.x - this.x) * (p.x - this.x) + (p.y - this.y) * (p.y - this.y));
-        }
-    }
-
-    @Override
-    public void onKeyPressed(KeyEvent e) {
-    }
-
-    public static final int KEY_SPACE = 32;
-    @Override
-    public void onKeyReleased(KeyEvent e) {
-        if(e.getKeyCode() == KEY_SPACE) {
+    Function<KeyEvent, Void> fn = (e) -> {
+        if (e.getKeyCode() == KEY_SPACE) {
             ArrayList<Point> newPoints = new ArrayList<>();
             int size = points.size();
             for (int i = 0; i < size; i++) {
                 Point p1, p2;
-                if(i == size - 1) {
+                if (i == size - 1) {
                     p1 = points.get(i);
                     p2 = points.get(0);
                 } else {
@@ -94,21 +77,21 @@ public class Main implements MoonlitInterface {
                 Point p5;
                 double x = l;
                 double y = h;
-                if(tan == 0) {
-                    if(p3.x < p4.x) 
+                if (tan == 0) {
+                    if (p3.x < p4.x)
                         p5 = new Point(x + p3.x, y + p3.y);
                     else
                         p5 = new Point(-x + p3.x, -y + p3.y);
-                    
+
                 } else {
                     double cos = Math.sqrt(1 / (1 + tan * tan));
                     double sin = Math.sqrt(1 - cos * cos);
-                    if(p3.x > p4.x) 
+                    if (p3.x > p4.x)
                         cos *= -1;
-                    if(p3.y > p4.y)
+                    if (p3.y > p4.y)
                         sin *= -1;
-                    
-                    double xx,yy;
+
+                    double xx, yy;
                     xx = x * cos - y * sin;
                     yy = x * sin + y * cos;
                     p5 = new Point(xx + p3.x, yy + p3.y);
@@ -119,12 +102,22 @@ public class Main implements MoonlitInterface {
                 newPoints.add(p4);
             }
             points = newPoints;
-            Moonlit.getInstance().reload();
+            Moonlit.getInstance().repaint();
         }
-    }
+        return null;
+    };
 
-    @Override
-    public void onKeyTyped(KeyEvent e) {
+    class Point {
 
+        public double x, y;
+
+        public Point(double x, double y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        public double distance(Point p) {
+            return Math.sqrt((p.x - this.x) * (p.x - this.x) + (p.y - this.y) * (p.y - this.y));
+        }
     }
 }

@@ -42,7 +42,6 @@ public class Setup {
     "import com.mnt1fg.moonlit.*;\n" +
     "import java.awt.Graphics;\n" +
     "import java.awt.Color;\n" +
-    "import java.awt.event.KeyEvent;\n\n" +
     "public class Main implements MoonlitInterface { \n\n"+
     "    public static void main(String[] args) { \n" +
     "        new Main();\n"+
@@ -53,18 +52,6 @@ public class Setup {
     "    public void onUpdate(Graphics g) { \n"+
     "        //draw something \n" + 
     "    }\n" +
-    "    @Override\n"+
-    "    public void onKeyPressed(KeyEvent e) {\n    }\n" +
-    "    @Override\n" + 
-    "    public void onKeyReleased(KeyEvent e) {\n    }\n" +
-    "    @Override\n" + 
-    "    public void onKeyTyped(KeyEvent e) {\n    }\n" +
-    "    @Override\n" + 
-    "    public void onKeyPressed(KeyEvent e) {\n    }\n" + 
-    "    @Override\n" + 
-    "    public void onKeyReleased(KeyEvent e) {\n    }\n" + 
-    "    @Override\n"+ 
-    "    public void onKeyTyped(KeyEvent e) {\n    }\n" +
     "}";
 
     public static final String TEMPLATE_BUILD = "" + 

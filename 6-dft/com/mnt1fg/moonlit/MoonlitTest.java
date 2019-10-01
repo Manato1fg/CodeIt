@@ -60,21 +60,4 @@ public class MoonlitTest implements MoonlitInterface {
         t++;
     }
 
-    @Override
-    public void onKeyPressed(KeyEvent e) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onKeyReleased(KeyEvent e) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onKeyTyped(KeyEvent e) {
-        // TODO Auto-generated method stub
-
-    }
 }

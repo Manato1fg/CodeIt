@@ -37,7 +37,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-
+import java.util.function.Function;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -282,25 +282,36 @@ public class Moonlit extends JFrame implements KeyListener{
 
     }
 
-    public void onKeyTyped() {
-        
+    ArrayList<Function<KeyEvent, Void>> keyTypedArray = new ArrayList<>();
+    
+    public void onKeyTyped(Function<KeyEvent, Void> f) {
+        keyTypedArray.add(f);
     }
-
-
-
     @Override
     public void keyTyped(KeyEvent e) {
-        this.panel.updateClasses.forEach(c -> c.onKeyTyped(e));
+        keyTypedArray.forEach(a -> a.apply(e));
+    }
+
+    ArrayList<Function<KeyEvent, Void>> keyPressedArray = new ArrayList<>();
+
+    public void onKeyPressed(Function<KeyEvent, Void> f) {
+        keyPressedArray.add(f);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        this.panel.updateClasses.forEach(c -> c.onKeyPressed(e));
+        keyPressedArray.forEach(a -> a.apply(e));
+    }
 
+
+    ArrayList<Function<KeyEvent, Void>> keyReleasedArray = new ArrayList<>();
+
+    public void onKeyReleased(Function<KeyEvent, Void> f) {
+        keyReleasedArray.add(f);
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        this.panel.updateClasses.forEach(c -> c.onKeyReleased(e));
+        keyReleasedArray.forEach(a -> a.apply(e));
     }
 }

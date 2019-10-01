@@ -37,7 +37,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-
+import java.util.function.Function;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -53,8 +53,8 @@ public class Moonlit extends JFrame implements KeyListener{
     private Color backgroundColor = Color.white;
     private int width, height;
     private boolean setupOk = false;
-    public boolean noLoop = false;
     public boolean isFirst = true;
+    public boolean noLoop = false;
     private int offsetWidth = 0, offsetHeight = 0;
 
     public double elapsedTime = 0.0;
@@ -198,10 +198,6 @@ public class Moonlit extends JFrame implements KeyListener{
         return this.backgroundColor;
     }
 
-    public void reload() {
-        this.panel.repaint();
-    }
-
     /**
      * utilities
      */
@@ -222,6 +218,23 @@ public class Moonlit extends JFrame implements KeyListener{
         destMax -= destMin;
         double y = destMax * ratio;
         return y + destMin;
+    }
+
+    public static double[] createRandomArray(int length, double min, double max) {
+        double[] ary = new double[length];
+        double range = max - min;
+        for (int i = 0; i < length; i++) {
+            ary[i] = Math.random() * range + min;
+        }
+        return ary;
+    }
+
+    /**
+     * for compiling
+     */
+
+    public static ComplexNumber cn(double re, double im) {
+        return new ComplexNumber(re, im);
     }
 
     
@@ -249,7 +262,7 @@ public class Moonlit extends JFrame implements KeyListener{
             this.updateClasses.forEach(c -> c.onUpdate(g));
             final double _ticks = Moonlit.getInstance().ticks;
             final MoonlitPanel _panel = this;
-            if (Moonlit.getInstance().isFirst && !Moonlit.getInstance().noLoop) {
+            if (Moonlit.getInstance().isFirst && Moonlit.getInstance().noLoop) {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -267,23 +280,42 @@ public class Moonlit extends JFrame implements KeyListener{
                 Moonlit.getInstance().isFirst = false;
             }
         }
-
     }
 
+    public void repaint() {
+        this.panel.repaint();
+    }
+
+    ArrayList<Function<KeyEvent, Void>> keyTypedArray = new ArrayList<>();
+    
+    public void onKeyTyped(Function<KeyEvent, Void> f) {
+        keyTypedArray.add(f);
+    }
     @Override
     public void keyTyped(KeyEvent e) {
-        this.panel.updateClasses.forEach(c -> c.onKeyTyped(e));
+        keyTypedArray.forEach(a -> a.apply(e));
+    }
 
+    ArrayList<Function<KeyEvent, Void>> keyPressedArray = new ArrayList<>();
+
+    public void onKeyPressed(Function<KeyEvent, Void> f) {
+        keyPressedArray.add(f);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        this.panel.updateClasses.forEach(c -> c.onKeyPressed(e));
+        keyPressedArray.forEach(a -> a.apply(e));
+    }
 
+
+    ArrayList<Function<KeyEvent, Void>> keyReleasedArray = new ArrayList<>();
+
+    public void onKeyReleased(Function<KeyEvent, Void> f) {
+        keyReleasedArray.add(f);
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        this.panel.updateClasses.forEach(c -> c.onKeyReleased(e));
+        keyReleasedArray.forEach(a -> a.apply(e));
     }
 }

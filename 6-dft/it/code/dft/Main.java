@@ -72,12 +72,4 @@ public class Main implements MoonlitInterface {
         t += dt;
         epiCycles(g, 200, HEIGHT / 2, fdArray);
     }
-    @Override
-    public void onKeyPressed(KeyEvent e) {
-    }
-    @Override
-    public void onKeyReleased(KeyEvent e) {
-    }
-    @Override
-    public void onKeyTyped(KeyEvent e) {
-    }}
+}
