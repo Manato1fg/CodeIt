@@ -37,14 +37,21 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.event.MouseInputListener;
 
-public class Moonlit extends JFrame implements KeyListener{
+public class Moonlit extends JFrame implements KeyListener {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     private static Moonlit instance = null;
     private MoonlitPanel panel = null;
     // how many times onUpdate() is called.
@@ -54,7 +61,11 @@ public class Moonlit extends JFrame implements KeyListener{
     private int width, height;
     private boolean setupOk = false;
     public boolean isFirst = true;
+    public boolean noLoop = false;
     private int offsetWidth = 0, offsetHeight = 0;
+
+    BufferedImage _img;
+    Graphics2D _g2d;
 
     public double elapsedTime = 0.0;
     private int playSpeed = 1;
@@ -86,6 +97,8 @@ public class Moonlit extends JFrame implements KeyListener{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.panel = new MoonlitPanel();
         this.add(this.panel);
+        _img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        _g2d = (Graphics2D) _img.getGraphics();
         setupOk = true;
     }
 
@@ -170,6 +183,8 @@ public class Moonlit extends JFrame implements KeyListener{
 
     public void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
+        _g2d.setColor(backgroundColor);
+        _g2d.fillRect(0, 0, this.width, this.height);
     }
 
     public void translate(int offsetWidth, int offsetHeight) {
@@ -228,6 +243,10 @@ public class Moonlit extends JFrame implements KeyListener{
         return ary;
     }
 
+    public void repaint() {
+        this.panel.repaint();
+    }
+
     /**
      * for compiling
      */
@@ -236,11 +255,18 @@ public class Moonlit extends JFrame implements KeyListener{
         return new ComplexNumber(re, im);
     }
 
-    
+    private class MoonlitPanel extends JPanel implements MouseInputListener {
 
-    private class MoonlitPanel extends JPanel {
-
+        /**
+         *
+         */
+        private static final long serialVersionUID = 1L;
         private ArrayList<MoonlitInterface> updateClasses = new ArrayList<MoonlitInterface>();
+
+        public MoonlitPanel() {
+            addMouseListener(this);
+            addMouseMotionListener(this);
+        }
 
         public void register(MoonlitInterface cls) {
             this.updateClasses.add(cls);
@@ -249,26 +275,28 @@ public class Moonlit extends JFrame implements KeyListener{
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
-            g.setColor(Moonlit.getInstance().getBackgroundColor());
-            g.fillRect(0, 0, Moonlit.getInstance().getWidth(), Moonlit.getInstance().getHeight());
+            // g.setColor(Moonlit.getInstance().getBackgroundColor());
+            // g.fillRect(0, 0, Moonlit.getInstance().getWidth(),
+            // Moonlit.getInstance().getHeight());
             if (Moonlit.getInstance().getAntiAliasing()) {
-                Graphics2D g2 = (Graphics2D) g;
                 // 図形や線のアンチエイリアシングの有効化
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                _g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 // 文字描画のアンチエイリアシングの有効化
-                g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+                _g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             }
-            this.updateClasses.forEach(c -> c.onUpdate(g));
+            this.updateClasses.forEach(c -> c.onUpdate(_g2d));
+            g.drawImage(_img, 0, 0, null);
             final double _ticks = Moonlit.getInstance().ticks;
             final MoonlitPanel _panel = this;
-            if (Moonlit.getInstance().isFirst) {
+            if (Moonlit.getInstance().isFirst && !noLoop) {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         while (true) {
                             try {
                                 _panel.repaint();
-                                TimeUnit.NANOSECONDS.sleep((long) (100000000 / _ticks / Moonlit.getInstance().getPlaySpeed()));
+                                TimeUnit.NANOSECONDS
+                                        .sleep((long) (100000000 / _ticks / Moonlit.getInstance().getPlaySpeed()));
                                 Moonlit.getInstance().elapsedTime += 1.0 / (double) _ticks;
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
@@ -280,38 +308,115 @@ public class Moonlit extends JFrame implements KeyListener{
             }
         }
 
+        ArrayList<Consumer<MouseEvent>> mouseDraggedArray = new ArrayList<>();
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            mouseDraggedArray.forEach(a -> a.accept(e));
+        }
+
+        ArrayList<Consumer<MouseEvent>> mouseMovedArray = new ArrayList<>();
+
+        @Override
+        public void mouseMoved(MouseEvent e) {
+            mouseMovedArray.forEach(a -> a.accept(e));
+        }
+
+        ArrayList<Consumer<MouseEvent>> mouseClickedArray = new ArrayList<>();
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            mouseClickedArray.forEach(a -> a.accept(e));
+        }
+
+        ArrayList<Consumer<MouseEvent>> mousePressedArray = new ArrayList<>();
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            mousePressedArray.forEach(a -> a.accept(e));
+        }
+
+        ArrayList<Consumer<MouseEvent>> mouseReleasedArray = new ArrayList<>();
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            mouseReleasedArray.forEach(a -> a.accept(e));
+        }
+
+        ArrayList<Consumer<MouseEvent>> mouseEnteredArray = new ArrayList<>();
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            mouseEnteredArray.forEach(a -> a.accept(e));
+        }
+
+        ArrayList<Consumer<MouseEvent>> mouseExitedArray = new ArrayList<>();
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+            mouseExitedArray.forEach(a -> a.accept(e));
+        }
+
     }
 
-    ArrayList<Function<KeyEvent, Void>> keyTypedArray = new ArrayList<>();
-    
-    public void onKeyTyped(Function<KeyEvent, Void> f) {
+    ArrayList<Consumer<KeyEvent>> keyTypedArray = new ArrayList<>();
+
+    public void onKeyTyped(Consumer<KeyEvent> f) {
         keyTypedArray.add(f);
     }
+
     @Override
     public void keyTyped(KeyEvent e) {
-        keyTypedArray.forEach(a -> a.apply(e));
+        keyTypedArray.forEach(a -> a.accept(e));
     }
 
-    ArrayList<Function<KeyEvent, Void>> keyPressedArray = new ArrayList<>();
+    ArrayList<Consumer<KeyEvent>> keyPressedArray = new ArrayList<>();
 
-    public void onKeyPressed(Function<KeyEvent, Void> f) {
+    public void onKeyPressed(Consumer<KeyEvent> f) {
         keyPressedArray.add(f);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        keyPressedArray.forEach(a -> a.apply(e));
+        keyPressedArray.forEach(a -> a.accept(e));
     }
 
+    ArrayList<Consumer<KeyEvent>> keyReleasedArray = new ArrayList<>();
 
-    ArrayList<Function<KeyEvent, Void>> keyReleasedArray = new ArrayList<>();
-
-    public void onKeyReleased(Function<KeyEvent, Void> f) {
+    public void onKeyReleased(Consumer<KeyEvent> f) {
         keyReleasedArray.add(f);
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        keyReleasedArray.forEach(a -> a.apply(e));
+        keyReleasedArray.forEach(a -> a.accept(e));
+    }
+
+    public void onMouseDragged(Consumer<MouseEvent> f) {
+        this.panel.mouseDraggedArray.add(f);
+    }
+
+    public void onMouseMoved(Consumer<MouseEvent> f) {
+        this.panel.mouseMovedArray.add(f);
+    }
+
+    public void onMouseClicked(Consumer<MouseEvent> f) {
+        this.panel.mouseClickedArray.add(f);
+    }
+
+    public void onMousePressed(Consumer<MouseEvent> f) {
+        this.panel.mousePressedArray.add(f);
+    }
+
+    public void onMouseReleased(Consumer<MouseEvent> f) {
+        this.panel.mouseReleasedArray.add(f);
+    }
+
+    public void onMouseEntered(Consumer<MouseEvent> f) {
+        this.panel.mouseEnteredArray.add(f);
+    }
+
+    public void onMouseExited(Consumer<MouseEvent> f) {
+        this.panel.mouseExitedArray.add(f);
     }
 }
