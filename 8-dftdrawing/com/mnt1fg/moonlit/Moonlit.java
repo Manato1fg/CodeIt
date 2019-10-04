@@ -456,4 +456,5 @@ public class Moonlit extends JFrame implements KeyListener {
     public void onMouseExited(Consumer<MouseEvent> f) {
         this.panel.mouseExitedArray.add(f);
     }
+
 }

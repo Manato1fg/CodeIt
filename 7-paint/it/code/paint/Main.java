@@ -35,7 +35,7 @@ public class Main implements MoonlitInterface {
         moonlit.setStroke(g, 10);
         moonlit.drawLine(g, lastPos.x, lastPos.y, newPos.x, newPos.y);
         lastPos = newPos;
-        System.out.println("new Point("+l((double)lastPos.x / 6.0)+","+ l((double) lastPos.y / 6.0)+"),");
+        System.out.println(l((double)lastPos.x / 6.0)+","+ l((double) lastPos.y / 6.0));
     }
 
     public static String l(double x) {
