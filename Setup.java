@@ -57,7 +57,7 @@ public class Setup {
     public static final String TEMPLATE_BUILD = "" + 
     "javac ./com/mnt1fg/moonlit/Moonlit.java\n"+
     "javac $1/Main.java\n" +
-    "java $1/Main";
+    "java $1/Main $@";
 
     public static final String TEMPLATE_UPDATE = "" +
     "git clone https://github.com/Manato1fg/Moonlit.git\n"+

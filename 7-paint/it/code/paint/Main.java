@@ -7,16 +7,33 @@ import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.awt.Color;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.BufferedWriter;
+import java.io.File;
 
 public class Main implements MoonlitInterface { 
 
     Position lastPos = null;
     Position newPos = null;
+    File saveFile;
+    BufferedWriter bw;
     public static void main(String[] args) { 
-        new Main();
+        new Main(args);
     }
 
-    public Main() {
+    public Main(String[] args) {
+        try {
+            if (args.length == 0) {
+                saveFile = new File("./data.txt");
+            } else {
+                saveFile = new File(args[0]);
+            }
+            saveFile.createNewFile();
+            bw = new BufferedWriter(new FileWriter(saveFile));
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
         Moonlit moonlit = Moonlit.getInstance();
         moonlit.createWindow(600, 600);
         moonlit.setBackgroundColor(Color.white);
@@ -36,6 +53,11 @@ public class Main implements MoonlitInterface {
         moonlit.drawLine(g, lastPos.x, lastPos.y, newPos.x, newPos.y);
         lastPos = newPos;
         System.out.println(l((double)lastPos.x / 6.0)+","+ l((double) lastPos.y / 6.0));
+        try {
+            bw.append(l((double) lastPos.x / 6.0) + "," + l((double) lastPos.y / 6.0));
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static String l(double x) {

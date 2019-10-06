@@ -16,19 +16,28 @@ public class Main implements MoonlitInterface {
     FourierData[] y_fd;
     public static double t = 0.00;
 
+    int width = 1200;
+    int height = 700;
+
     ArrayList<MVector> points = new ArrayList<>();
 
     public static void main(String[] args) {
-        new Main();
+        String data_txt;
+        if(args.length == 0) {
+            data_txt = "./Data.txt";
+        } else {
+            data_txt = args[0];
+        }
+        new Main(data_txt);
     }
 
-    public Main() {
+    public Main(String data_txt) {
         Moonlit moonlit = Moonlit.getInstance();
-        moonlit.createWindow(600, 600);
+        moonlit.createWindow(width, height);
         ArrayList<Double> x_data = new ArrayList<>();
         ArrayList<Double> y_data = new ArrayList<>();
         try {
-            Data.get(x_data, y_data, 10, 3.0);
+            Data.get(data_txt, x_data, y_data, 10, 4.0);
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(0);
@@ -50,10 +59,12 @@ public class Main implements MoonlitInterface {
         moonlit.setColor(g, Color.white);
         int data_length = data.length;
         for (int i = 0; i < data_length; i++) {
-            moonlit.drawCircle(g, (int) x, (int) y, (int) data[i].cn.amp);
+            if(i != 0)
+                moonlit.drawCircle(g, (int) x, (int) y, (int) data[i].cn.amp);
+
             x1 = x + data[i].cn.amp * Math.cos(data[i].frequency * t + data[i].cn.angle + phi);
             y1 = y + data[i].cn.amp * Math.sin(data[i].frequency * t + data[i].cn.angle + phi);
-            if (i != data.length - 1)
+            if (i != data.length - 1 && i != 0)
                 moonlit.drawLine(g, (int) x, (int) y, (int) x1, (int) y1);
             x = x1;
             y = y1;
@@ -65,10 +76,10 @@ public class Main implements MoonlitInterface {
     public void onUpdate(Graphics g) {
         Moonlit moonlit = Moonlit.getInstance();
         moonlit.setColor(g, Color.black);
-        moonlit.fillRect(g, 0, 0, 600, 600);
+        moonlit.fillRect(g, 0, 0, width, height);
         moonlit.setStroke(g, 1);
-        MVector v1 = epiCycles(g, 300, 40, 0.0, x_fd);
-        MVector v2 = epiCycles(g, 40, 300, Math.PI / 2, y_fd);
+        MVector v1 = epiCycles(g, 800, 150, 0.0, x_fd);
+        MVector v2 = epiCycles(g, 150, 300, Math.PI / 2, y_fd);
         // Moonlit.log("V1: " + (v1.x - 400) + " , " + (v1.y - 40));
         moonlit.setColor(g, Color.white);
         moonlit.drawLine(g, v1.x, v1.y, v1.x, v2.y);
@@ -80,7 +91,7 @@ public class Main implements MoonlitInterface {
         if(points.size() > data_max) {
             points.remove(0);
         }
-        moonlit.setStroke(g, 4);
+        moonlit.setStroke(g, 8);
         for (int i = points.size() - 1; i > 0; i--) {
             MVector p1 = points.get(i);
             MVector p2 = points.get(i - 1);

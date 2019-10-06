@@ -8,10 +8,9 @@ import java.util.ArrayList;
 
 public class Data {
 
-    public static final String FILE_STRING = "./Data.txt";
 
-    public static void get(ArrayList<Double> x_data, ArrayList<Double> y_data, int skipCount, double scaler) throws IOException{
-        File file = new File(FILE_STRING);
+    public static void get(String file_string, ArrayList<Double> x_data, ArrayList<Double> y_data, int skipCount, double scaler) throws IOException{
+        File file = new File(file_string);
         BufferedReader bReader = new BufferedReader(new FileReader(file));
         String line;
         int i = 0;
