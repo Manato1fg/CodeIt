@@ -14,7 +14,7 @@ public class Main implements MoonlitInterface {
     public static final int BUBBLE_SORT = 0;
     public static final int QUICK_SORT = 1;
     public static final int STALIN_SORT = 2;
-    public int sort_type = STALIN_SORT;
+    public int sort_type = QUICK_SORT;
     public Sort sort;
 
     public static final int count = 240;

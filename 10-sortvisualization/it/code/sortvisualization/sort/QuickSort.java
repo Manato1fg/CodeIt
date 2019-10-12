@@ -65,11 +65,11 @@ public class QuickSort extends Sort{
     }
 
     public void updateNext(int left, int right, int i, int j){
-        if( i - 1 - left >= 0) {
+        if( i - 1 - left >= 5) {
             next.add(new Pair(left, i - 1));
         }
 
-        if (right - j - 1 >= 0) {
+        if (right - j - 1 >= 5) {
             next.add(new Pair(j + 1, right));
         }
         return;
