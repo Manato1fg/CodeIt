@@ -75,7 +75,7 @@ public class QuickSort extends Sort{
         return;
     }
 
-    private class Pair {
+    public static class Pair {
         int left, right;
         public Pair(int left, int right) {
             this.left = left;

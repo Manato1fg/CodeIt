@@ -14,10 +14,11 @@ public class Main implements MoonlitInterface {
     public static final int BUBBLE_SORT = 0;
     public static final int QUICK_SORT = 1;
     public static final int STALIN_SORT = 2;
+    public static final int MERGE_SORT = 3;
     public int sort_type = QUICK_SORT;
     public Sort sort;
 
-    public static final int count = 240;
+    public static final int count = 1024;
 
     public static void main(String[] args) {
         new Main();
@@ -31,7 +32,6 @@ public class Main implements MoonlitInterface {
         //moonlit.noLoop = true;
         moonlit.register(this);
         moonlit.translate(400, 300);
-        moonlit.showWindow();
         switch(sort_type) {
             case BUBBLE_SORT:
                 sort = new BubbleSort(count);
@@ -42,9 +42,14 @@ public class Main implements MoonlitInterface {
             case STALIN_SORT:
                 sort = new StalinSort(count);
                 break;
+            case MERGE_SORT:
+                sort = new MergeSort(count);
+                break;
             default:
                 sort = new BubbleSort(count);
         }
+
+        moonlit.showWindow();
     }
 
     public static void init(ArrayList<Double> data) {
