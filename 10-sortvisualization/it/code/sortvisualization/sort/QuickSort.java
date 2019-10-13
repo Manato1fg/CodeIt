@@ -2,14 +2,16 @@ package it.code.sortvisualization.sort;
 
 import java.util.ArrayList;
 
+import it.code.sortvisualization.Main;
+
 public class QuickSort extends Sort{
     public ArrayList<Pair> next = new ArrayList<>();
     public Pair now;
     public boolean first = true;
     public boolean update = true;
 
-    public QuickSort(int count) {
-       super(count);
+    public QuickSort(Main main) {
+       super(main);
     }
 
     int i = 0, j = 0;
@@ -27,10 +29,7 @@ public class QuickSort extends Sort{
 
         if(update) {
             if(next.size() == 0) {
-                if(bs == null) {
-                    bs = new BubbleSort(this.data);
-                }
-                bs.step();
+                this.finish();
                 return;
             }
             this.update = false;
@@ -65,11 +64,11 @@ public class QuickSort extends Sort{
     }
 
     public void updateNext(int left, int right, int i, int j){
-        if( i - 1 - left >= 5) {
+        if( i - 1 - left >= 0) {
             next.add(new Pair(left, i - 1));
         }
 
-        if (right - j - 1 >= 5) {
+        if (right - j - 1 >= 0) {
             next.add(new Pair(j + 1, right));
         }
         return;

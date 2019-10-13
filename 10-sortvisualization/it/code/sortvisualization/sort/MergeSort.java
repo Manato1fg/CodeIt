@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.mnt1fg.moonlit.Moonlit;
 
+import it.code.sortvisualization.Main;
 import it.code.sortvisualization.sort.QuickSort.Pair;
 
 public class MergeSort extends Sort {
@@ -14,14 +15,15 @@ public class MergeSort extends Sort {
     int separateCount = 0;
     int num = 1;
     int lastX = 0;
-    public MergeSort(int count) {
-        super(count);
+    public MergeSort(Main main) {
+        super(main);
     }
 
     
     @Override
     public void step() {
         if(lastX + num >= this.count) {
+            this.finish();
             return;
         }
         if(lastX + 2 * num >= this.count) {

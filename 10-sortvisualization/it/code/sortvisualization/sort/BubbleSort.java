@@ -2,9 +2,11 @@ package it.code.sortvisualization.sort;
 
 import java.util.ArrayList;
 
+import it.code.sortvisualization.Main;
+
 public class BubbleSort extends Sort {
-    public BubbleSort(int count) {
-        super(count);
+    public BubbleSort(Main main) {
+        super(main);
     }
 
     public BubbleSort(ArrayList<Double> data) {
@@ -14,8 +16,10 @@ public class BubbleSort extends Sort {
     int lastIndex = 0;
     int n = 0;
     public void step() {
-        if (n == this.count - 1)
+        if (n == this.count - 1){
+            this.finish();
             return;
+        }
 
         double a = 0.0, b = 0.0;
         while(true) {
@@ -32,7 +36,6 @@ public class BubbleSort extends Sort {
             if (a > b) {
                 data.set(lastIndex, b);
                 data.set(lastIndex + 1, a);
-                break;
             }
             lastIndex++;
         }

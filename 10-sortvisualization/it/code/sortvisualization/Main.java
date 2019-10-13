@@ -15,8 +15,11 @@ public class Main implements MoonlitInterface {
     public static final int QUICK_SORT = 1;
     public static final int STALIN_SORT = 2;
     public static final int MERGE_SORT = 3;
-    public int sort_type = QUICK_SORT;
+    public int sort_type = BUBBLE_SORT;
     public Sort sort;
+
+    public boolean shuffling = false;
+    public boolean finished = false;
 
     public static final int count = 1024;
 
@@ -32,37 +35,30 @@ public class Main implements MoonlitInterface {
         //moonlit.noLoop = true;
         moonlit.register(this);
         moonlit.translate(400, 300);
-        switch(sort_type) {
-            case BUBBLE_SORT:
-                sort = new BubbleSort(count);
-                break;
-            case QUICK_SORT:
-                sort = new QuickSort(count);
-                break;
-            case STALIN_SORT:
-                sort = new StalinSort(count);
-                break;
-            case MERGE_SORT:
-                sort = new MergeSort(count);
-                break;
-            default:
-                sort = new BubbleSort(count);
-        }
+
+        sort = new BubbleSort(this);
 
         moonlit.showWindow();
     }
 
-    public static void init(ArrayList<Double> data) {
+    public void init(ArrayList<Double> data) {
         double step = 1.0 / (double) count;
         for (int i = 0; i < count; i++) {
             data.add(step * (double) i);
         }
-        shuffle(data);
+        shuffling = true;
     }
 
-    public static void shuffle(ArrayList<Double> _data) {
+    int i = 0;
+    public void shuffle(ArrayList<Double> _data) {
         double a = 0.0;
-        for (int i = 0; i < count; i++) {
+        for(int j = 0; j < 10; j++) {
+            i++;
+            if (i == count) {
+                i = 0;
+                shuffling = false;
+                return;
+            }
             int index = (int) Math.floor(Math.random() * count);
             a = _data.get(index);
             _data.set(index, _data.get(i));
@@ -85,14 +81,39 @@ public class Main implements MoonlitInterface {
 
     @Override
     public void onUpdate(Graphics g) {
+        if(shuffling) {
+            shuffle(sort.getData());
+        } else if(finished) {
+            if(sort_type == MERGE_SORT) return;
+            sort_type++;
+            finished = false;
+            shuffling = true;
+            switch (sort_type) {
+            case BUBBLE_SORT:
+                sort = new BubbleSort(this);
+                break;
+            case QUICK_SORT:
+                sort = new QuickSort(this);
+                break;
+            case STALIN_SORT:
+                sort = new StalinSort(this);
+                break;
+            case MERGE_SORT:
+                sort = new MergeSort(this);
+                break;
+            default:
+                sort = new BubbleSort(this);
+            }
+
+        } else {
+            sort.step();
+        }
         Moonlit moonlit = Moonlit.getInstance();
         moonlit.setColor(g, Color.black);
         moonlit.fillRect(g, -400, -300, 800, 600);
         for(int i = 0; i < count; i++) { 
             drawPoint(i, g);
         } 
-
-        sort.step();
     }
     
 }
