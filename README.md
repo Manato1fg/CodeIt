@@ -39,5 +39,5 @@ is a project which draws a barnsleyfern. By calculating formula on [Wikipedia](h
 <img src="./09-barnsleyfern/barnsleyfern.png">
 
 ## #10-sortvisualization
-is a project which shows how sort algorithm works with a color cycle. There are four type of sort algorithm: Bubble Sort, Quick Sort, Stalin Sort, Merge Sort. You CANNOT see which sort algorithm is first because conditions are different each other.
+is a project which shows how sort algorithm works with a color cycle. There are four type of sort algorithm: Bubble Sort, Quick Sort, Stalin Sort, Merge Sort. You CANNOT see which sort algorithm is fast because conditions are different each other.
 [![](https://img.youtube.com/vi/ICqBMIfkeYM/0.jpg)](https://www.youtube.com/watch?v=ICqBMIfkeYM)
