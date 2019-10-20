@@ -22,11 +22,11 @@ public class MergeSort extends Sort {
     
     @Override
     public void step() {
-        if(lastX + num >= this.count) {
+        if(lastX + num >= Main.count) {
             this.finish();
             return;
         }
-        if(lastX + 2 * num >= this.count) {
+        if(lastX + 2 * num >= Main.count) {
             ArrayListWithPosition a = getSeparetedArrayList(lastX, num, this.data);
             lastX += num;
             ArrayListWithPosition b = getSeparetedArrayList(lastX, this.data.size() - lastX, this.data);

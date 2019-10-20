@@ -15,6 +15,8 @@ public class Main implements MoonlitInterface {
     public static final int QUICK_SORT = 1;
     public static final int STALIN_SORT = 2;
     public static final int MERGE_SORT = 3;
+    public static final int HEAP_SORT = 4;
+    public static final int SORT_COUNT = 4;
     public int sort_type = BUBBLE_SORT;
     public Sort sort;
 
@@ -84,7 +86,7 @@ public class Main implements MoonlitInterface {
         if(shuffling) {
             shuffle(sort.getData());
         } else if(finished) {
-            if(sort_type == MERGE_SORT) return;
+            if(sort_type == SORT_COUNT) return;
             sort_type++;
             finished = false;
             shuffling = true;
@@ -100,6 +102,9 @@ public class Main implements MoonlitInterface {
                 break;
             case MERGE_SORT:
                 sort = new MergeSort(this);
+                break;
+            case HEAP_SORT:
+                sort = new HeapSort(this);
                 break;
             default:
                 sort = new BubbleSort(this);

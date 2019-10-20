@@ -12,13 +12,11 @@ public class Sort {
     public Main main;
 
     public Sort(Main main) {
-        this.count = Main.count;
         main.init(this.data);
         this.main = main;
     }
 
     public Sort(ArrayList<Double> data) {
-        this.count = data.size();
         this.data = data;
     }
 

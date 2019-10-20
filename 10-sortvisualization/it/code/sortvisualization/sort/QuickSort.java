@@ -23,7 +23,7 @@ public class QuickSort extends Sort{
     @Override
     public void step() {
         if(first) {
-            next.add(new Pair(0, this.count - 1));
+            next.add(new Pair(0, Main.count - 1));
             first = false;
         }
 
