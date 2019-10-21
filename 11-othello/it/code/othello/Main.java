@@ -15,7 +15,7 @@ public class Main implements MoonlitInterface {
     public static final int SPACE = 0;
     public static final int WHITE = 1;
 
-    public boolean isBlack = false;
+    public boolean isBlack = true;
 
     public static void main(String[] args) { 
         new Main();
@@ -44,10 +44,10 @@ public class Main implements MoonlitInterface {
             }
         }
 
-        stage[3][3] = BLACK;
-        stage[3][4] = WHITE;
-        stage[4][3] = WHITE;
-        stage[4][4] = BLACK;
+        stage[3][3] = WHITE;
+        stage[3][4] = BLACK;
+        stage[4][3] = BLACK;
+        stage[4][4] = WHITE;
     }
     
 
@@ -167,6 +167,31 @@ public class Main implements MoonlitInterface {
         }
     }
 
+    public boolean setRedMarker(Graphics g) {
+        Moonlit moonlit = Moonlit.getInstance();
+        int color = isBlack ? BLACK : WHITE;
+        boolean none = true;
+        for (int p = 0; p < 8; p++) {
+            for (int q = 0; q < 8; q++) {
+                int[] flags = new int[8];
+                if (canPut(p, q, color, flags)) {
+                    none = false;
+                    moonlit.setColor(g, Color.red);
+                    int pp = p * w + line_width;
+                    int qq = q * w + line_width;
+                    moonlit.fillCircle(g, pp + w / 2, qq + w / 2, w / 2 - 10);
+                }
+            }
+        }
+        return none;
+    }
+
+    public void switchDueToNoPlace() {
+        String s_color = isBlack ? "黒" : "白";
+        Moonlit.log("%sはもう置く場所がありません。", s_color);
+        isBlack = !isBlack;
+    }
+
     @Override
     public void onUpdate(Graphics g) { 
         Moonlit moonlit = Moonlit.getInstance();
@@ -186,41 +211,11 @@ public class Main implements MoonlitInterface {
             }
         }
 
-        int color = isBlack ? BLACK : WHITE;
-        boolean none = true;
-        for (int p = 0; p < 8; p++) {
-            for (int q = 0; q < 8; q++) {
-                int[] flags = new int[8];
-                if (canPut(p, q, color, flags)) {
-                    none = false;
-                    moonlit.setColor(g, Color.red);
-                    int pp = p * w + line_width;
-                    int qq = q * w + line_width;
-                    moonlit.fillCircle(g, pp + w / 2, qq + w / 2, w / 2 - 10);
-                }
-            }
-        }
-        if(none == true) {
-            String s_color = color == BLACK ? "黒" : "白";
-            Moonlit.log("%sはもう置く場所がありません。", s_color);
-            isBlack = !isBlack;
-            color = isBlack ? BLACK : WHITE;
-            none = true;
-            for (int p = 0; p < 8; p++) {
-                for (int q = 0; q < 8; q++) {
-                    int[] flags = new int[8];
-                    if (canPut(p, q, color, flags)) {
-                        none = false;
-                        moonlit.setColor(g, Color.red);
-                        int pp = p * w + line_width;
-                        int qq = q * w + line_width;
-                        moonlit.fillCircle(g, pp + w / 2, qq + w / 2, w / 2 - 10);
-                    }
-                }
-            }
-            if(none == true) {
-                s_color = color == BLACK ? "黒" : "白";
-                Moonlit.log("%sはもう置く場所がありません。", s_color);
+        
+        if(setRedMarker(g) == true) {
+            switchDueToNoPlace();
+            if(setRedMarker(g) == true) {
+                switchDueToNoPlace();
                 Moonlit.log("ゲーム終了");
                 finish();
                 return;
